@@ -1,0 +1,19 @@
+{{extend 'exp_layout.html'}}
+
+
+<style>
+#debrief-message {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+</style>
+
+<div id="debrief-message" style="top: 200px; left: 100px;">
+  <p>You are finished. Thanks for participating!</p>
+  <h6>Your completion code is {{=request.vars['code']}}</h6>
+  <br><br>
+  <h2>Sign up for future studies!</h2>
+  {{=register_form}}
+</div>
+

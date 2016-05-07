@@ -1,0 +1,42 @@
+{{extend 'adaptation_layout.html'}}
+
+
+<!DOCTYPE html>
+<!-- 
+  The consent.html displays the text of your IRB-approved
+  consent form.  Even if you are not required to provide
+  a consent form, it is helpful to use this form to 
+  describe what people can do if an error comes up, etc...
+
+-->
+<style>
+#consent {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+</style>
+<div id="consent">
+    <p> 
+        The following experiment will consist of images of faces that you 
+        will be rating. Please ckeck the box to consent to participate.
+    </p>
+    <p> 
+        <input type="checkbox" id="consent_checkbox" />
+        I agree to participate in this study.
+    </p>
+    <button type="button" id="start" onclick="consent_verify()">Start Experiment</button>
+</div>
+<script>
+  function consent_verify() {
+     id = 'consent_checkbox';
+    
+     url =  '{{=URL("adaptation", "index", args=request.args, vars=request.vars)}}';
+     if ($('#' + id).is(":checked")) {
+         window.location.replace(url);
+     }
+     else {
+        alert('Please consent to participate before continuing');
+     }
+ }
+</script>

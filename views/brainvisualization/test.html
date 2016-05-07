@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<style>
+#image-valued-shape {
+    /* shape-outside and background-image set below */
+    shape-image-threshold: 0;
+    shape-margin: 5px;
+    width: 150px;
+    height: 275px;
+    float: left;
+}
+#container {
+  position: absolute;
+  width: 400px;
+  height: auto;
+  background: rgba(200, 200, 200, 0.8);
+  padding: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+</style>
+<body>
+<button onclick="wraptext()">Click me</button>
+<script>
+wraptext = function() {
+      var svgShapeURL = 'url(/init/static/brainvisualization/svgslices/102291506.svg)';
+      document.getElementById("image-valued-shape").style.shapeOutside = svgShapeURL;
+      document.getElementById("image-valued-shape").style.backgroundImage = svgShapeURL;
+      document.getElementById("text").innerHTML = "Forthwith a change came over the waters... this is jkasdj flkjs adl jfsadl fjiod sjfoiejfewi ofja ajsdflja";
+}
+</script>
+<div id="container">
+  <div id="image-valued-shape"></div>
+  <p id="text"></p>
+</div>
+</body>
+</html>

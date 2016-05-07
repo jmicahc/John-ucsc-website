@@ -1,0 +1,45 @@
+var paths = ['Materials/odd_audio_video/sin-23/sin-23.mov__No way
+Materials/odd_audio_video/sin-01/sin-01.mov__Great!
+Materials/odd_audio_video/sin-35/sin-35.mov__Good job!
+Materials/odd_audio_video/sar-44/sar-44.mov__Who cares?
+Materials/odd_audio_video/sar-10/sar-10.mov__Sign me up!
+Materials/odd_audio_video/sar-28/sar-28.mov__Definitely.
+Materials/odd_audio_video/sar-04/sar-04.mov__Yeah, right.
+Materials/odd_audio_video/sin-19/sin-19.mov__Please, go on...
+Materials/odd_audio_video/sin-27/sin-27.mov__Totally!
+Materials/odd_audio_video/sar-18/sar-18.mov__My week just keeps getting better!
+Materials/odd_audio_video/sar-30/sar-30.mov__No, he wouldn't!
+Materials/odd_audio_video/sin-05/sin-05.mov__That's interesting.
+Materials/odd_audio_video/sin-33/sin-33.mov__Looking good.
+Materials/odd_audio_video/sar-06/sar-06.mov__That's just what I needed.
+Materials/odd_audio_video/sin-11/sin-11.mov__How awful!
+Materials/odd_audio_video/sin-39/sin-39.mov__Good as new!
+Materials/odd_audio_video/sin-37/sin-37.mov__Well isn't that nice?
+Materials/odd_audio_video/sar-20/sar-20.mov__It's totally safe!
+Materials/odd_audio_video/sin-15/sin-15.mov__Oh yeah, good one!
+Materials/odd_audio_video/sar-34/sar-34.mov__Tell me about it...
+Materials/odd_audio_video/sin-17/sin-17.mov__It's really great to be here!
+Materials/odd_audio_video/sin-07/sin-07.mov__Stop it!
+Materials/odd_audio_video/sin-25/sin-25.mov__Abortions for everybody!
+Materials/odd_audio_video/sin-45/sin-45.mov__Gosh!
+Materials/odd_audio_video/sin-03/sin-03.mov__Good for you!
+Materials/odd_audio_video/sar-40/sar-40.mov__That will be real hard!
+Materials/odd_audio_video/sin-29/sin-29.mov__Right.
+Materials/odd_audio_video/sin-21/sin-21.mov__You're a genius.
+Materials/odd_audio_video/sar-08/sar-08.mov__Really?
+Materials/odd_audio_video/sin-09/sin-09.mov__I'm so happy for you!
+Materials/odd_audio_video/sin-13/sin-13.mov__This game is great!
+Materials/odd_audio_video/sar-32/sar-32.mov__I would never do that!
+Materials/odd_audio_video/sin-31/sin-31.mov__Wonderful!
+Materials/odd_audio_video/sar-16/sar-16.mov__Way to go!
+Materials/odd_audio_video/sar-38/sar-38.mov__That'll be totally easy!
+Materials/odd_audio_video/sar-12/sar-12.mov__I'd love to see that!
+Materials/odd_audio_video/sin-43/sin-43.mov__I never expected that!
+Materials/odd_audio_video/sar-42/sar-42.mov__You scared the hell out of me!
+Materials/odd_audio_video/sin-41/sin-41.mov__I'd trust him
+Materials/odd_audio_video/sar-26/sar-26.mov__You know, you really need a razor scooter.
+Materials/odd_audio_video/sar-36/sar-36.mov__You're too kind!
+Materials/odd_audio_video/sar-22/sar-22.mov__Bummer!
+Materials/odd_audio_video/sar-14/sar-14.mov__Happy? I'm thrilled!
+Materials/odd_audio_video/sar-24/sar-24.mov__Who doesn't?
+Materials/odd_audio_video/sar-02/sar-02.mov__Oh wow!

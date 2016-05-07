@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="{{=URL('static', 'brainvisualization/brainstructure.css')}}"/>
+    <script type="text/javascript" src="{{=URL('static', 'js/d3.js')}}"></script>
+    <script type="text/javascript" src="{{=URL('static', 'js/d3.layout.js')}}"></script>
+    <script type="text/javascript" src="{{=URL('static', 'js/jquery.js')}}"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div id="tooltip" class="hidden">
+          <div id="brain"></div>
+          <p id="region-description">this is a test of things. lets hope it works.</p>
+      </div>
+      <div id="title">
+        <h1 style = "text-align:center; color:steelblue"><bold>Physical Structure of the Brain</bold></h1>
+      </div> 
+      <div id="root-container">
+        <div id="icicle"></div>
+        <div id="description">
+          <h4>Description</h4>
+          </p>Above is a visualization of the structure hierarchy of the brain
+          in d3.js. Mouseover the region to highlight the associated brain region and
+          pull up a tooltip containing wikipedia information about the reigion.</p>
+
+          <p> The size of each rectangle is related to the computed size of the brain region, 
+          at least in relative terms. A relative volume for each region was exproximated by 
+          adding up the calculated area of the associated svg image over every slice svg for which
+          it was defined.</p>
+          
+
+          <h4> Sources: </h4>
+          <ol>
+              <li><a href="http://mbostock.github.io/d3/talk/20111018/partition.html">Zoomable Horizontal Icicle Diagram</a> by Mike Bostock
+              <li>Neuroanatomical Data and Illustrations From The <a href="http://www.brain-map.org/">Allen Brain Atlas</a></li>
+              <li>Page Template by the Illustrious <a href="https://users.soe.ucsc.edu/~lodha/">Dr. Suresh Lodha</a></li>
+          </ol> 
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="{{=URL('static', 'brainvisualization/brainstructure.js')}}"></script>
+
+  </body>
+</html>

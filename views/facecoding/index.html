@@ -1,0 +1,54 @@
+{{extend 'exp_layout.html'}}
+
+<div id="experiment_elements">
+  <h3></h3>
+  <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
+      <table cellspacing="40px">
+          <tr>
+              <td>
+                  <input type='hidden' value='' name='assignmentId' id='assignmentId' />
+                  <input type='hidden' id="polygon" name="comment" class=" form-control">
+              </td>
+              </td>
+              </td>
+              <td>
+                <img src="{{=URL('static', 'facecoding/images/example.png')}}"></img>
+              </td>
+              <td id="right-side"></td>
+          </tr>
+      </table>
+  </form>
+
+  <div id="experiment_descirption">
+    <p>Use the mouse to outline the features on the left face according the example on the right.</p>
+  </div>
+  <div>
+  {{=form}}
+  </div>
+</div>
+<script src="{{=URL('static', 'facecoding/js/polygon.js')}}"></script>
+<script>
+
+
+test = $.ajax({
+    type: 'GET',
+    url: '{{=URL("facecoding", "getpolys")}}',
+    dataType: 'json',
+    success: function() {console.log('data recieved'); },
+    data: {},
+    async: false
+});
+
+$("#polygons_date_created__row").hide();
+$("#polygons_Face_Number__row").hide();
+$("#polygons_polygon_id__row").hide();
+$("#polygons_polygon_names__row").hide();
+$("#polygons_verticies__row").hide();
+
+// draw canvas on which to define polygons.
+// The second argument is a list of polygons
+// to be drawn by default on the image.
+$('#polygon').canvasAreaDraw({
+        imageUrl: "{{=URL('static', 'facecoding/images/img' + str(request.args[0]) + '.jpg')}}"
+    }, [[]])
+</script>

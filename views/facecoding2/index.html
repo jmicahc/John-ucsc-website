@@ -1,0 +1,376 @@
+<html>
+<head>
+  <title>Polygons</title>
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="{{=URL('static', 'js/d3.min.js')}}"></script>
+</head>
+<style>
+body, html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#image-panel {
+  background:#A3CBE0;
+  border:2px solid #000;
+  overflow:auto;
+  white-space:nowrap;
+  min-height: 100px;
+  box-shadow:0 0 10px #000;
+}
+.scrolling-images {
+  margin: 10px auto;
+  margin-left: 10px;
+  border: 2px solid #000;
+}
+.ui-buttons[type=button] {
+  height: 40px;
+  width: 100px;
+  margin: 12px;
+}
+#buttons-div {
+  background: grey;
+  border: 2px solid #000;
+  min-height: 60px;
+  margin; 20px;
+
+}
+#popup-label {
+  position: center;
+}
+
+#popup-div {
+  position:absolute;
+  background: white;
+  width:150px;
+  height:100px;
+  border:5px solid #000;
+  z-index: 9002;
+}
+#popup-select, #region {
+  margin: 0 auto;
+  padding: 5px;
+  width: 148px
+}
+
+svg {
+  height: 75% !important;
+  width: 100% !important;
+}
+img {
+  position: relative;
+  min-height: 100px;
+  height: 90%;
+  width: auto;
+}
+
+</style>
+<body>
+
+<div id="popup-div" style="display:none">
+  <label id="pipup-label">Select region.</label>
+  <select name="day" id="region" fade="fast">
+     <option value="left_eye">Left eye</option>
+     <option value="right_eye">Right eye</option>
+     <option value="lip_top">Lip top</option>
+     <option value="lip_bottom">Lip bottom</option>
+     <option value="eyebrow_left">Left eye brow</option>
+     <option value="eyebrow_right">Right eye brow</option>
+   </select>
+   <table>
+     <td><input id="popup-select" href="#" type="button" value="Select"></td>
+   </table>
+ </div>
+</div>
+<script>
+
+var t;
+
+d3.json("{{=URL('facecoding2', 'getimages')}}", 
+    function(images) {
+        var image_ptr = 0
+        var current_image = images[0];
+
+        var image_src = "/init/facecoding2/download/" + current_image.file;
+        //$("#code-image").attr("href", mytest);
+
+        var rect_width = 4,
+            rect_height = 4;
+
+        var polys = current_image;
+
+        var current_poly = null;
+
+        var xScale = d3.scale.linear()
+            .domain([0,1000])
+            .range([0,1000]);
+
+        var	yScale = d3.scale.linear()
+            .domain([0,1000])
+            .range([0,1000]);
+
+
+        var zoom = d3.behavior.zoom()
+          .x(xScale)
+          .y(yScale)
+          .scaleExtent([1,30])
+          .on("zoom", zoomed);
+
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("x", 10)
+            .attr("y", 0)
+            .attr("width", "100%")
+            .call(zoom)
+            .on("mousedown", function() { processClick(); });
+
+
+        var buttons = d3.select("body").append("div")
+            .attr("id", "buttons-div")
+            .attr("style", "width:100%;height:5%;");
+
+        buttons.append('input')
+            .attr("type", "button")
+            .attr("class", "ui-buttons")
+            .attr("data-inline", "true")
+            .attr("value", "Undo")
+            .html("undo")
+            .on("click", function() { 
+               d3.select("#label-" + current_poly + "-" + (polys[current_poly].length-1))
+                 .remove();
+               d3.select("#rect-" + current_poly + "-" + (polys[current_poly].length-1))
+                 .remove();
+               polys[current_poly].pop();
+               d3.select('#polygon-' + current_poly)
+                 .attr("points", function() { return polys[current_poly].map(function(d) { return [d.x, d.y].join(","); }).join(" ");});
+            });
+        buttons.append('input')
+            .attr("type", "button")
+            .attr("value", "Finish")
+            .attr("class", "ui-buttons")
+            .attr("data-inline", "true")
+            .html("undo")
+            .on("click", function() { 
+                finishPoly(current_poly);
+            });
+
+        buttons.append('input')
+            .attr("type", "button")
+            .attr("class", "ui-buttons")
+            .attr("value", "Save")
+            .attr("data-inline", "true")
+            .html("undo")
+            .on("click", function() { 
+                savepolys(polys);
+            });
+
+        var image_panel = d3.select("body").append("div")
+            .attr("id", "image-panel")
+            .attr("style", "width:100%;height:20%;")
+        
+        for (var i = 0; i < images.length; i++) {
+            var curr_image = images[i];
+            image_panel.append("img")
+                .attr("id", "image-" + curr_image.name)
+                .attr("class", "scrolling-images")
+                .attr("name", curr_image.name)
+                .attr("imageindex", i)
+                .attr("x", "0")
+                .attr("y", "0")
+                .attr("height", "768")
+                .attr("width", "512")
+                .attr("src", "/init/facecoding2/download/" + curr_image.file)
+                .attr("width", "auto")
+                .attr("height", "140px")
+                .on("click", function() { 
+                    d3.select("#code-image")
+                       .attr("xlink:href", this.getAttribute("src"));
+                    var img_index = +this.getAttribute("imageindex");
+                    console.log('image index', img_index);
+                    init(img_index);
+                });
+        }
+        var container = svg.append("g");
+
+        function zoomed() {
+            container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        }
+
+        container.append("image")
+           .attr("id", "code-image")
+           .attr("xlink:href", image_src)
+           .attr("x", "0")
+           .attr("y", "0")
+           .attr("height", "768")
+           .attr("width", "512");
+
+        var savepolys = function() {
+            console.log('saving polygons');
+            var data = JSON.stringify(polys);
+            $.ajax({
+              type: 'POST',
+              url: "../facecoding2/savedata?name=test",
+              contentType: "application/json; charset=utf-8",
+              data: data,
+              dataType: 'json',
+              complete: function(data) {
+                    console.log('request completed');
+                    }
+            });
+        }
+
+        var dragVertex = d3.behavior.drag()
+            .on("dragstart", function(d) {console.log("drag starting!"); console.log(d); })
+            .on("drag", function(d) {      var rect = d3.select(this);
+              rect.attr("x", xScale.invert(event.pageX - (rect_width / 2)))
+                  .attr("y", yScale.invert(event.pageY - (rect_width / 2)));
+              var label = d3.select("#" + rect.attr("textid"))
+                  .attr("x", xScale.invert(event.pageX - (rect_width / 2)))
+                  .attr("y", yScale.invert(event.pageY - (rect_width / 2)));
+              var vertex_index = +rect.attr("vertex-index");
+              var poly = container.select("#polygon-" + rect.attr("class"));
+              poly.attr("points", function (d) {
+                console.log(event.pageX, " ", event.pageY);
+                d[vertex_index] = {x: xScale.invert(event.pageX), y: yScale.invert(event.pageY)};
+                return d.map(function(d) { return [d.x, d.y].join(","); }).join(" ");
+              });
+            })
+            .on("dragend", function(){ console.log("drag ended"); });
+
+        var processClick = function () {
+          /*
+          Select between 2 actions: (1) add vertex to polygon, or
+                                    (2) start new polygon.
+
+           If current current_polygon is null:
+               create new polygon (addPolygon).
+           Else:
+               add vertex to polygon.
+          */
+          var mouse = {x: d3.event.pageX, y: d3.event.pageY};
+
+          if (current_poly == null) {
+            getLabel( mouse );
+          }
+          else {
+            addPoint( mouse, current_poly );
+          }
+        }
+        var finishPoly = function(name) { 
+            d3.select('#polygon-' + name)
+              .attr('fill', 'black')
+              .attr('stroke', 'white')
+            current_poly = null; 
+            //d3.event.stoppropagation();
+        }
+
+        var getLabel = function( point ) {
+          d3.select("#popup-div")
+              .attr("style", "display:inline;left:" + d3.event.pageX + ";top:" + d3.event.pageY + ";");
+          d3.select("#popup-select")
+              .on("click", function() {
+                  var e = document.getElementById("region");
+                  var name = e.options[e.selectedIndex].value;
+                  console.log(name);
+                  addPolygon( name);
+                  d3.select("#popup-div").attr("style", "display:none");
+                  event.stopPropagatfion();
+                  });
+        }
+
+        var addPoint = function( point, name ) {
+             container.select("#polygon-" + name)
+                .attr("points",function(d) {
+                  console.log('adding point');
+                  d.push({x: xScale.invert(point.x), y: yScale.invert(point.y)});
+                  return d.map(function(d) { return [d.x, d.y].join(","); }).join(" ");
+                });
+                addBox(point, name, polys[name].length -1);
+        };
+
+        var addBox = function (point, name, num) {
+             container.append('text')
+                .attr("id","label-" + name + "-" + num)
+                .attr("fill", "white")
+                .attr("class", name)
+                .attr("font-size", "10")
+                .text(num)
+                .attr("x", xScale.invert(point.x - (rect_width / 2)) )
+                .attr("y", yScale.invert(point.y - (rect_height / 2)) );
+
+            container.append('rect')
+                .attr("class", name)
+                .attr("id", "rect-" + name + "-" + num)
+                .attr("textid", "label-" + name + "-" + num)
+                .attr("label", 10)
+                .attr("x", xScale.invert(point.x - (rect_width / 2)) )
+                .attr("y", yScale.invert(point.y - (rect_height / 2)) )
+                .attr("width", rect_width)
+                .attr("height", rect_height)
+                .attr("vertex-index", num)
+                .attr("style","fill:red;stroke:black;stroke-width:1")
+                .on("mousedown", function() { d3.event.stopPropagation(); })
+                .on("dblclick", function() { 
+                  finishPoly(name);
+                })
+                .call(dragVertex);
+        };
+
+
+        var addPolygon = function( name ) {
+          console.log('adding polygon');
+          current_poly = name;
+
+          if (d3.select('#polygon-' + name)[0][0] == null) {
+            container.append("polygon")
+              .attr("class", name)
+              .attr("id", 'polygon-' + name)
+              .attr("stroke", "green")
+              .attr("fill", "red")
+              .attr("stroke-width", 1)
+              .attr("fill-opacity", .3)
+              .attr("points", function() {
+                   return polys[name].map(function(d) { return [d.x, d.y].join(","); }).join(" ");
+               })
+              .data([polys[name]]).enter();
+
+            polys[name].forEach(function (d, i) {
+                  //console.log(i);
+                addBox({x: xScale(d.x), y: yScale(d.y) }, name, i);
+                });
+            finishPoly(name);
+
+          } else {
+            d3.select('#polygon-' + name)
+              .attr('fill', 'red')
+              .attr('stroke', 'green');
+          }
+        }
+        var init = function(img_index) {
+            d3.selectAll('.left_eye').remove();
+            d3.selectAll('.right_eye').remove();
+            d3.selectAll('.eyebrow_left').remove();
+            d3.selectAll('.eyebrow_right').remove();
+            d3.selectAll('.lip_top').remove();
+            d3.selectAll('.lip_bottom').remove();
+
+            console.log('hello world');
+            polys = images[img_index];
+            t = current_image;
+            console.log(img_index);
+            addPolygon("left_eye");
+            addPolygon("right_eye");
+            addPolygon("eyebrow_left");
+            addPolygon("eyebrow_right");
+            addPolygon("lip_top");
+            addPolygon("lip_bottom");
+        }
+        init(0);
+
+    });
+</script>
+</body>
+</html>

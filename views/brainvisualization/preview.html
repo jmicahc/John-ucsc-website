@@ -1,0 +1,11 @@
+{{extend 'layout.html'}}
+
+
+<h2>Visualizing the Structure Hierarchy of The Brain</h2>
+<div class="preview">
+  <img src="{{=URL('static', 'brainvisualization/brainvisualization.png')}}" class="rel-image"></img>
+  {{=description}}
+  <ul>
+    <li><a type="button" href="{{=URL(studyname, 'brainstructure')}}">View</a></li>
+  </ul>
+</div>

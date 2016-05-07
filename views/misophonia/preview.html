@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+
+
+<h2>Misophonia Study</h2>
+<div class="preview">
+  <img src="{{=URL('static', 'mesophonia/images/preview.png')}}" class="rel-image"></img>
+  {{=description}}
+  <ul>
+    <li><a type="button" href="{{=URL(studyname, 'index', vars={'preview': 'true'})}}">Preview</a></li>
+    <li><a type="button" href="{{=URL(studyname, 'index', vars={'preview': 'false'})}}">Participate</a></li>
+    <li><a type "buttom" href="{{=URL(studyname, 'dashboard', vars={'viewonly': 'true'})}}">View Data</a></li>
+  </ul>
+</div>

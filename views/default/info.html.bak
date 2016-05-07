@@ -1,0 +1,9 @@
+{{extend 'layout.html'}}
+
+<h2>Like Research? Like making Money?</h2>
+<br>
+<p>Members of the UCSC Perception Lab have access to
+exclusive studies and will recieve updates about
+opportunities to participate in new studies.</p>
+
+<p>Sign up today for free!<p>

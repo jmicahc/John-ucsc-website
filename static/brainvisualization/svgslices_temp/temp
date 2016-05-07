@@ -1,0 +1,46 @@
+[?1049h[?1h=[1;58r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[58;1H"trimtree.py" 37L, 954C[1;1H[35mimport[m json
+
+[33mdef[m [36mprintsubtree[m(root):
+    [33mprint[m root.id
+    [33mif[m '[31mchildren[m' [33min[m root:[6;8H [33mfor[m child [33min[m root['[31mchildren[m']:[7;12H printsubtree(child)
+
+
+[33mdef[m [36msvginsubtree[m(root, ):
+  [33mif[m '[31mpath_ids[m' [33min[m root:[12;6H [33mreturn[m True
+
+  [33mif[m '[31mchildren[m' [33min[m root:[15;6H [33mfor[m child [33min[m root['[31mchildren[m']:[16;10H [33mreturn[m svginsubtree(child)
+
+[33mdef[m [36mtrim[m(root, parent=None, index=-1):
+    [33mif[m [33mnot[m svginsubtree(root):[20;8H printsubtree(root)[21;8H [33mdel[m parent['[31mchildren[m'][index][23;4H [33mif[m '[31mchildren[m' [33min[m root:
+[34m········[m[25;8H [34m#Delete all first children and make grandparent parents[m[26;8H [33mif[m len(root['[31mchildren[m']) == 0:[27;12H [33mif[m parent:[28;16H parent['[31mchildren[m'] = root['[31mchildren[m'][30;8H [33mfor[m i, child [33min[m enumerate(root['[31mchildren[m']):[31;12H trim(child, parent=root, index=i)
+
+[33mif[m __name__ == "[31m__main__[m":
+    f = open('[31mallenwithslice.json[m', '[31mr[m')
+    data = json.loads(f.read())
+    trim(data)
+    open('[31mallentrimmed_3.json[m', '[31mw[m').write(json.dumps(data))
+[1m[34m~                                                                                                     [39;1H~                                                                                                     [40;1H~                                                                                                     [41;1H~                                                                                                     [42;1H~                                                                                                     [43;1H~                                                                                                     [44;1H~                                                                                                     [45;1H~                                                                                                     [46;1H~                                                                                                     [47;1H~                                                                                                     [48;1H~                                                                                                     [49;1H~                                                                                                     [50;1H~                                                                                                     [51;1H~                                                                                                     [52;1H~                                                                                                     [53;1H~                                                                                                     [54;1H~                                                                                                     [55;1H~                                                                                                     [56;1H~                                                                                                     [57;1H~                                                                                                     [m[58;85H3,1[11CAll[3;1H[?12l[?25h[?25l[58;75H^Z[3;1H[58;1H
+[?1l>[?12l[?25h[?1049l[?1049h[?1h=[?12;25h[?12l[?25h[27m[m[H[2J[?25l[1;1H[35mimport[m json
+
+[33mdef[m [36mprintsubtree[m(root):
+    [33mprint[m root.id
+    [33mif[m '[31mchildren[m' [33min[m root:[6;8H [33mfor[m child [33min[m root['[31mchildren[m']:[7;12H printsubtree(child)
+
+
+[33mdef[m [36msvginsubtree[m(root, ):
+  [33mif[m '[31mpath_ids[m' [33min[m root:[12;6H [33mreturn[m True
+
+  [33mif[m '[31mchildren[m' [33min[m root:[15;6H [33mfor[m child [33min[m root['[31mchildren[m']:[16;10H [33mreturn[m svginsubtree(child)
+
+[33mdef[m [36mtrim[m(root, parent=None, index=-1):
+    [33mif[m [33mnot[m svginsubtree(root):[20;8H printsubtree(root)[21;8H [33mdel[m parent['[31mchildren[m'][index][23;4H [33mif[m '[31mchildren[m' [33min[m root:
+[34m········[m[25;8H [34m#Delete all first children and make grandparent parents[m[26;8H [33mif[m len(root['[31mchildren[m']) == 0:[27;12H [33mif[m parent:[28;16H parent['[31mchildren[m'] = root['[31mchildren[m'][30;8H [33mfor[m i, child [33min[m enumerate(root['[31mchildren[m']):[31;12H trim(child, parent=root, index=i)
+
+[33mif[m __name__ == "[31m__main__[m":
+    f = open('[31mallenwithslice.json[m', '[31mr[m')
+    data = json.loads(f.read())
+    trim(data)
+    open('[31mallentrimmed_3.json[m', '[31mw[m').write(json.dumps(data))
+[1m[34m~                                                                                                     [39;1H~                                                                                                     [40;1H~                                                                                                     [41;1H~                                                                                                     [42;1H~                                                                                                     [43;1H~                                                                                                     [44;1H~                                                                                                     [45;1H~                                                                                                     [46;1H~                                                                                                     [47;1H~                                                                                                     [48;1H~                                                                                                     [49;1H~                                                                                                     [50;1H~                                                                                                     [51;1H~                                                                                                     [52;1H~                                                                                                     [53;1H~                                                                                                     [54;1H~                                                                                                     [55;1H~                                                                                                     [56;1H~                                                                                                     [57;1H~                                                                                                     [m[58;85H3,1[11CAll[3;1H[?12l[?25h[?25l[38;1H[K[39;1H[K[3;1H[?12l[?25h[58;1H[?1l>[?1049lVim: Caught deadly signal HUP
+Vim: Finished.
+[58;1H

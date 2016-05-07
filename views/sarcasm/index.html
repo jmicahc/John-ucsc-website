@@ -1,0 +1,115 @@
+{{extend 'adaptation_layout.html'}}
+
+<html>
+  <head>
+    <title>Sarcasm</title>
+    <!-- Load the jspsych library and plugins -->
+    <script src="{{=URL('static', 'js/jspsych.js')}}"></script>
+    <script src="{{=URL('static', 'js/d3.min.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-survey-likert.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-text.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-single-stim.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-call-function.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-html.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/screenfull.min.js')}}"></script>
+    <!-- Load the stylesheet -->
+    <link href="{{=URL('static', 'css/experiment.css')}}" type="text/css" rel="stylesheet"></link>
+  </head>
+
+  <body>
+    <div id="jspsych_target"></div>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-fullscreen.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/paths_odd.js')}}"></script>
+    <script type="text/javascript">
+     
+      var n_trails = 2;
+
+      var stimuli_types = ["single-word", "multi-word"];
+      //1. Read filee
+      var video_lhs = '<video autoplay><source src=';
+      var video_rhs = ' ></video>';
+ 
+      var ordered_trials =[];
+      var texts = [];
+      for (var i = 0; i < 1; i++) {
+          console.log(paths[i][0]);
+          ordered_trials.push(video_lhs + paths[i][0] + video_rhs + "<br>" + paths[i][1]);
+      }
+      //Rating scale questions
+      var rating_questions = ["Please rate the sarcasm", "Rate the confidence in your previous rating"];
+      var rating_scale = ['Sarcastic', 'Not sarcastic'];
+      var confidence_scale = ['Very Confident','Somewhat confidence', 'Not confident'];
+
+      var rand_trials = [];
+      var randIndex = 0;
+      var index = 0;
+      while (index < ordered_trials.length) {
+          rand_index = Math.floor(Math.random() * ordered_trials.length);
+          rand_trials.push(ordered_trials[rand_index]);
+          ordered_trials.splice(rand_index, 1);
+          index++;
+      }
+  
+      var welcome_message = '<div id="instructions"><p>Welcom to the experiment! Press enter to continue.</p></div>';
+      var instructions = '<div id=instructions>{{=instructions}}</div>';
+
+      var debrief = '<div id="instructions"><p>You have finished the experiment. Thanks for participating!\
+            Press enter to have your data saved.</ip>';
+
+//      var trials = [];
+      var opt_data = [];
+
+    
+      var html_block = {
+             type: 'html',
+             pages: [{url: "{{=URL('static', 'sarcasm/fullscreen.html')}}", cont_btn: "start", check_fn: fullscreen}]
+          };
+      var welcome_block = {
+             type: 'text',
+             text: [welcome_message],
+             timing_post_trial: 0
+          };
+      var instruction_block = {
+             type: 'text',
+             text: [instructions],
+             timing_ost_trial: 1500
+          };
+
+      console.log('ran_trial 0:', rand_trials[0]);
+      var test_block = {
+          type: "survey-likert",
+          stimuli: rand_trials,
+          is_html: true,
+          questions: rating_questions,
+          labels: [["Sarcastic", "Not sarcastic"], ["Very Confident", "Somewhat confident", "Not Confident"]],
+          intervals: [[2],[3]]
+      };
+
+      var debrief_block = {
+             type: "text",
+             text: [debrief]
+          };
+
+      jsPsych.init({
+          display_element: $('#jspsych_target'),
+          experiment_structure: [html_block, welcome_block, instruction_block, test_block, debrief_block],
+          on_finish: function(data) {
+            console.log(data);
+            var data = JSON.stringify(jsPsych.data());
+
+            $.ajax({
+              type: 'POST',
+              url: '{{=URL("sarcasm", "savedata", vars=request.vars)}}',
+              contentType: "application/json; charset=utf-8",
+              data: data,
+              dataType: 'json',
+              success: function(form) {
+                console.log(form);
+                $('body').append(form['form']);
+              }
+           });
+         }
+      });
+    </script>·
+  </body>
+</html>

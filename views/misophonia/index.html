@@ -1,0 +1,111 @@
+{{extend 'adaptation_layout.html'}}
+
+<html>
+  <head>
+    <title>Sarcasm</title>
+    <!-- Load the jspsych library and plugins -->
+    <script src="{{=URL('static', 'js/jspsych.js')}}"></script>
+    <script src="{{=URL('static', 'js/d3.min.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-survey-likert.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-text.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-single-stim.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-call-function.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/jspsych-html.js')}}"></script>
+    <script src="{{=URL('static', 'sarcasm/js/screenfull.min.js')}}"></script>
+    <!-- Load the stylesheet -->
+    <link href="{{=URL('static', 'css/experiment.css')}}" type="text/css" rel="stylesheet"></link>
+  </head>
+
+  <body>
+    <div id="jspsych_target"></div>
+    <script type="text/javascript">
+
+$.getJSON('{{=URL("misophonia", "getstimuli")}}', function (stimuli) {
+    
+      var training_trials = [];
+      var trials = [];
+      stimuli.forEach(function (d, i) {
+        if (i < 3) {
+          training_trials.push(d.file);
+        } else {
+          trials.push(d.file);
+        }
+      });
+
+      //Rating scale questions
+      var rating_questions = ["How does this sound make you feel?", "How did you find the sound?", "Did this sound give you any bodily sensations?"];
+      var comfortable_scale = ['Comfortable', 'Neutral', 'Uncomfortable'];
+      var pleasantness_scale = ['Pleasant','Neutral', 'Unpleasant'];
+      var sensation_scale = ['No sensation', 'Intense sensation.']
+
+
+      var instructions = '<div id=instructions>{{=instructions[0]}}{{=instructions[1]}}</div>';
+      var continue_instr = '<div id=instructions>{{=instructions[2]}}</div>';
+
+      var debrief = '<div id="instructions"><p>You have finished the experiment. Thanks for participating!\
+            Please press enter to fill out a quick survey.</ip>';
+
+      var instruction_block = {
+             type: 'text',
+             text: [instructions],
+             timing_ost_trial: 1500
+          };
+
+      var training_block = {
+          type: "survey-likert",
+          stimuli: training_trials,
+          is_html: true,
+          questions: rating_questions,
+          labels: [comfortable_scale, pleasantness_scale, sensation_scale],
+          intervals: [[7],[7],[7]]
+      };
+      
+      var instr2_block = {
+          type: 'text',
+          text: [continue_instr],
+          timing_ost_trial: 1500
+      };
+
+
+      var test_block = {
+          type: "survey-likert",
+          stimuli: trials,
+          is_html: true,
+          questions: rating_questions,
+          labels: [comfortable_scale, pleasantness_scale, sensation_scale],
+          intervals: [[7],[7],[7]]
+      };
+
+      var debrief_block = {
+             type: "text",
+             text: [debrief]
+          };
+
+      jsPsych.init({
+          display_element: $('#jspsych_target'),
+          experiment_structure: [instruction_block, training_block, instr2_block, test_block, debrief_block],
+          on_finish: function(data) {
+            if ("{{=request.vars['preview']}}" === "True") {
+                return;
+            }
+            data[1].map(function (d, i) { d["cond"] = stimuli[i].cond; return d; });
+            data[3].map(function (d, i) { d["cond"] = stimuli[i+3].cond;  return d; }); //hack here. fix later.
+            console.log(data);
+            var data = JSON.stringify(jsPsych.data());
+            $.ajax({
+              type: 'POST',
+              url: '{{=URL("misophonia", "savedata", vars=request.vars)}}',
+              contentType: "application/json; charset=utf-8",
+              data: data,
+              dataType: 'json',
+              complete: function(form) {
+                window.location.replace("https://docs.google.com/a/ucsc.edu/forms/d/1w1J8lRxAjPsJoNQjfpKOVXyBgJkOkYUs2znmmkhxXFY/viewform");
+              }
+           });
+          
+         }
+      });
+});
+    </script>
+  </body>
+</html>

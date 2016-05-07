@@ -1,0 +1,105 @@
+{{extend 'adaptation_layout.html'}}
+
+<div id="jspsych_target"></div>
+
+<script type="text/javascript">
+
+var fullscreen = function() { 
+    if ($('#consent_checkbox').is(':checked')) {
+	return true;
+    } else {
+	alert("If you with to participate, you must check the box next the the statement 'I agree to participate in this study.'");
+	return false;
+    }
+};
+
+// testing query strings. Taken from:
+// /http://stackoverflow.com/questions/2405355/
+// how-to-pass-a-parameter-to-a-javascript-through-a-url-and-display-it-on-a-page/ 
+var surveycode = {};
+var query = window.location.search.substring(1).split("&");
+for (var i = 0, max = query.length; i < max; i++)
+{
+  if (query[i] === "")
+    continue;
+
+  var param = query[i].split("=");
+  surveycode[decodeURIComponent(param[0])] = decodeURIComponent(param[1] || "");
+}
+
+// Messages
+var welcome_message = '<div id="instructions"><p>Welcome to the experiment!</p><p>Please rate the following faces. Press enter to continue.</p></p></div>';
+
+var debrief = '<div id="instructions"><p>You have finished the experiment. Thanks for participating!\
+    Press enter to have your data saved.</ip>';
+
+// defining groups of questions that will go together.
+var q1 = ["How attractive is this face?"];
+var q2 = ["How distinctive is this face?"];
+var q3 = ['How old is this face?'];
+
+var q4 = ["What gender is this face?"];
+
+// Stimuli for two conditioon test.
+var pic1 = '{{=URL("static", "images/" + pic1)}}';
+var pic2 = '{{=URL("static", "images/" + pic2)}}';
+var images = [pic1, pic1, pic1, pic2];
+var cond_tags = ['malefront', 'femalefront'];
+
+// definiting two different response scales that can be used.
+var scale_1 = ["Not attractive", "Somewhat attractive", "Highly attractive"];
+var scale_2 = ["Not distinctive", "Somewhat distinctive", "Very distinctive"];
+var scale_3 = ["20s", "30s", "40s"];
+var scale_4 = ["Male", "Not sure", "Female"];
+
+console.log(images);
+var likert_block = {
+    type: 'survey-likert',
+    stimuli: images,
+    questions: [q1, q2, q3, q4],
+    labels: [[scale_1],[scale_2],[scale_3],[scale_4]], // need one scale for every question on a page
+    intervals: [[scale_1.length],[scale_2.length],[scale_3.length],[scale_4.length]] // note the the intervals and labels don't necessarily need to match.
+};
+
+var welcome_block = {
+       type: 'text',
+       text: [welcome_message],
+       timing_post_trial: 0
+    };
+
+// debriefing block shown after experiment.
+var debrief_block = {
+     type: "text",
+     text: [debrief]
+};
+
+// launch jspsych experiment
+jsPsych.init({
+    display_element: $('#jspsych_target'),
+    experiment_structure: [welcome_block, likert_block],
+    on_finish: function(data) {
+       console.log(data);
+       document.getElementById("jspsych_target").innerHTML = "Thanks for participating! Your completion code is: " + surveycode['code'];
+       var data = JSON.stringify(jsPsych.data());
+
+
+       $.ajax({
+          type: 'POST',
+          url: '{{=URL("adaptation", "savedata", vars=request.vars)}}',
+          contentType: "application/json; charset=utf-8", 
+          data: data,
+          dataType: 'json',
+          success:  function(form) { 
+              console.log(form); 
+              $('body').append(form['form']);
+              }
+       });
+
+       var url = '{{=URL("shared", "debrief", args=request.args, vars=request.vars)}}'
+       window.location.replace(url)
+
+
+       
+    }
+});
+</script>

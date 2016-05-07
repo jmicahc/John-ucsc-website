@@ -1,0 +1,24 @@
+<div="consent">
+    <p>
+        This is a demo experiment, with this minimal consent form being loaded
+        as an external html document. After clicking 'Start Experiment', the
+        experiment will enter fullscreen mode. We ask that you please remain
+        in fullscreen mode throughout the durration of the experiment.
+    </p>
+    <p>
+        <input type="checkbox" id="consent_checkbox" />
+        I agree to participate in this study.
+    </p>
+    <button type="button" id="start">Start Experiment</button>
+    <script>
+        document.getElementById('start').addEventListener('click', function() {
+            if (screenfull.enabled) {
+                console.log("requesting fullscreen")
+                screenfull.request()
+            } else {
+                console.log("fullscreen is not enabled")
+            }
+        })
+    </script>
+<div>
+
