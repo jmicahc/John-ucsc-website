@@ -1,26 +1,86 @@
 /* Few styling segments were obtained from: http://mbostock.github.io/d3/talk/20111018/partition.html*/
 
-#root {
-  background-color "grey";
-  height: 100%;
-  width: 100%;
+body {
+    margin: 0px;
 }
 
 
 .brain-slice {
-  position: absolute;
-  width: 150px;
+  box-shadow: 10px 0px 10px #D4D4D4;
+  min-width: 120px;
   height: auto;
 }
 
 .chart {
   display: block;
-  margin: auto;
+  margin: auto 0px;
   font-size: 11px;
 }
 
+#root-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+}
+
 #title {
-  background-color: grey;
+  box-shadow: 0px 0 15px #000000;
+  display: flex;
+  height: 80px;
+  z-index: 10;
+}
+
+#icicle-row {
+  box-shadow: inset 0px 0 15px #000000;
+  display: flex;
+  z-index: 5;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background-color: #999;
+}
+
+#icicle  {
+  display: flex;
+  align-self: stretch;
+}
+
+#slices-view {
+  background-color: #eee;
+  display: flex;
+  height: 300px;
+  overflow: auto;
+}
+
+
+#tooltip {
+  display: flex;
+  flex-wrap: wrap;OB
+  margin: auto 0px;
+  z-index: 10;.
+  width: 100%;
+}
+
+#focused-slice {
+  margin-top: 200px;
+}
+
+
+#region-description {
+  margin: auto 35px;
+  max-width: 300px;
+}
+
+
+.list-slice {
+  height: 300px;
+}
+
+#description {
+  min-width: 550px;
+  max-width: 600px;
+  z-index: 5;
 }
 
 rect {
@@ -38,13 +98,9 @@ text {
   pointer-events: none;
 }
 
-
-
 #chart, #header, #footer {
   top: 0;
 }
-
-
 
 #header, #footer {
   z-index: 1;
@@ -132,22 +188,11 @@ path {
   stroke-width: 20;
 }
 
-
-#brain .brain {
-  shape-image-threshold: 0;
-  shape-margin: 5px;
+#brain {
   display: flex;
-  width: 150px; 
-  height: 275px;
-  float: left;
-  background-repeat: no-repeat;
+  width: 300px;
 }
 
-
-#root-container {
-  display: flex;
-
-}
 #desription {
   min-width: 400px;
 }
@@ -167,25 +212,3 @@ path {
   stroke-opacity: .5;
   fill: none;
 }
-
-
-/* Toolitp was adapted from: http://bl.ocks.org/Caged/6476579 */
-#tooltip {
-  position: absolute;
-  width: 400px;
-  height: auto;
-  background: rgba(200, 200, 200, 0.8);
-  padding: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-  pointer-events: none;
-}
-
-#tooltip.hidden {
-  display: none;
-}
-
